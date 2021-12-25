@@ -13,7 +13,12 @@
     ],
     "rules": {
       "no-console": 1,
-      "prettier/prettier": 2,
+      "prettier/prettier": [
+        "error",
+        {
+          "endOfLine": "auto"
+        }
+      ],
       "quotes": ["error", "double"]
     }
   }
