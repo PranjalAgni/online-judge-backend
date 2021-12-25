@@ -8,8 +8,7 @@ export class SubmitRoutes extends CommonRoutesConfig {
   }
 
   configureRoutes(): express.Application {
-    this.app.route("/submit").get(submitController.submit);
-
+    this.app.route("/submit").post(submitController.submit);
     return this.app;
   }
 }
