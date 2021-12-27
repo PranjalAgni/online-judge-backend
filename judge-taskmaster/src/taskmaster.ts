@@ -5,8 +5,12 @@ import { Channel, Connection } from "amqplib/callback_api";
 import queueConfig from "./queue.config";
 import debug from "debug";
 import config from "@config/index";
+import { createRunbox, deleteCodeFile, writeCodeFile } from "./utils/file";
 
 const debugLog: debug.IDebugger = debug(`${config.debugNamespace}`);
+
+// creates run box if it does not exist already
+createRunbox();
 
 amqp.connect(
   "amqp://localhost:5672",
@@ -23,14 +27,19 @@ amqp.connect(
         try {
           const jobData = JSON.parse(msg.content.toString());
           debugLog("Jobdata: " + JSON.stringify(jobData, undefined, 2));
+          writeCodeFile({
+            name: `solution-${jobData.id}.cpp`,
+            code: jobData.source
+          });
           const jobResult = {
             ...jobData,
             status: "success"
           };
 
+          deleteCodeFile(`solution-${jobData.id}.cpp`);
           channel.sendToQueue(
             queueConfig.successQueue,
-            new Buffer(JSON.stringify(jobResult))
+            Buffer.from(JSON.stringify(jobResult))
           );
         } catch (error) {
           logger.error(error);

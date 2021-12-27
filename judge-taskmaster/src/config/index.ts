@@ -4,6 +4,7 @@ process.env.NODE_ENV = "development" || process.env.NODE_ENV;
 
 export default {
   debugNamespace: "judge-taskmaster",
+  runBox: `${appRoot}/runbox`,
   winston: {
     file: {
       level: "info",
